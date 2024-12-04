@@ -1,0 +1,13 @@
+{
+  "name": "com.hnl.kra-importer",
+  "version": "1.0.0",
+  "displayName": "Kra Importer",
+  "description": "Importer that import kra(krita) file directly. Only merged image.",
+  "keywords": [
+  ],
+  "author": {
+    "name": "Harold Lever",
+    "email": "harold_lever@outlook.com",
+    "url": "https://www.unity3d.com"
+  }
+}

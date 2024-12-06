@@ -4,6 +4,7 @@ using System.IO.Compression;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.AssetImporters;
+using UnityEngine.Serialization;
 
 namespace HNL
 {
@@ -17,10 +18,19 @@ namespace HNL
         }
         
         public TextureType textureType = TextureType.Texture2D;
+        
         public SpriteSettings spriteSettings = new SpriteSettings();
+        
+        public TextureFormat textureFormat = TextureFormat.ARGB32;
+        public int mipCount = -1;
+        public bool isLinearColor = false;
+        public bool createUninitialized = false;
+        public bool useMipmapLimit = false;
+        public string mipmapLimitGroupName = string.Empty;
+        
         public TextureWrapMode wrapMode = TextureWrapMode.Repeat;
         public FilterMode filterMode = FilterMode.Bilinear;
-        public int anisoLevel = 1;
+        [Range(0, 16)] public int anisoLevel = 1;
 
 
         public override void OnImportAsset(AssetImportContext ctx)
@@ -43,13 +53,21 @@ namespace HNL
                         byte[] imageByte = new byte[byteLength];
                         stream.Read(imageByte, 0, byteLength);
 
-                        Texture2D texture = new Texture2D(1, 1);
+                        Texture2D texture = new Texture2D(
+                            1,
+                            1,
+                            textureFormat,
+                            mipCount,
+                            isLinearColor,
+                            createUninitialized,
+                            new MipmapLimitDescriptor(useMipmapLimit, mipmapLimitGroupName)
+                            );
                         ImageConversion.LoadImage(texture, imageByte);
 
                         texture.wrapMode = wrapMode;
                         texture.filterMode = filterMode;
                         texture.anisoLevel = anisoLevel;
-                        // texture.Apply();
+                        texture.Apply();
 
                         ctx.AddObjectToAsset("merged image", texture, texture);
                         ctx.SetMainObject(texture);
